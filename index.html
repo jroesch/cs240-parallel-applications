@@ -16,7 +16,7 @@
     <div class="wrapper">
       <header>
         <h1>CMPSC 240/h1>
-        <p>A description of HaXL a framework for parallel</p>
+        <p>A description of HaXL</p>
 
         <!-- <p class="view"><a href="https://github.com/jroesch/cs240-parallel-applications">View the Project on GitHub <small>jroesch/cs240-parallel-applications</small></a></p>
 
@@ -28,12 +28,24 @@
         </ul> -->
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+        <h1>HaXL</h1>
+          <p>
+          HaXL is a domain specific language for that is initially being used to fight spam at Facebook.
+          It is designed specifically for site-integretity engineers to write spam filtering rules.
+          To do this these engineers must query Facebook's vast data stores and make decisions based
+          on the data. Their original solution was a custom rule interpreter FXL. It written in C++ and
+          suffered from a variety of problems. Most importantly as a seperate language it was limited and
+          lacked the power and efficency of industrial strength languages and their accompying compilers.
+          
+          Simon Marlow is one of the core contributors to Haskell, and decided that Haskell would be a great
+          fit for doing this. Equipping engineers with the ability to write rules, but also be able to
+          encode general purpose buissness logic, all while ignoring the data layer.
+          </p>
+          
+          <p>
+          HaXL is an abstraction layer over data sources, and hides the details of data fetching while still presenting
+          an interface of fetching data.
+          </p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/jroesch">jroesch</a></p>
