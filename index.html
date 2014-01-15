@@ -15,8 +15,8 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>CMPSC 240/h1>
-        <p>A description of HaXL</p>
+        <h1>CMPSC 240</h1>
+        <p>A description of HaXL from Facebook</p>
 
         <!-- <p class="view"><a href="https://github.com/jroesch/cs240-parallel-applications">View the Project on GitHub <small>jroesch/cs240-parallel-applications</small></a></p>
 
@@ -44,8 +44,38 @@
           
           <p>
           HaXL is an abstraction layer over data sources, and hides the details of data fetching while still presenting
-          an interface of fetching data.
+          an interface of fetching data. The approach they take reifies points at which a program may block on a data
+          fetch. 
           </p>
+          
+          <p>
+          Haskell is a language of rich abstractions and supports a notion of Monads which enable a vareity
+          of behaviors, but most importantly for HaXL's purposes the idea of a concurrency monad or sometimes
+          known as free monad.
+          </p>
+          
+          A monad is anything that satisfies this interface:
+          
+          <pre><code>
+          class Monad m where
+            return :: a -> m a
+            (>>=)  :: m a -> (a -> m b) -> m b
+          </code></pre>
+          
+          HaXL proposes an implementation of this signature that allows one to write programs that rely on data fetches.
+          
+          <pre><code>
+            newtype Haxl a = Haxl { unHaxl :: Result a }
+            data Result a = Done a 
+                          | Blocked (Haxl a)
+            instance Monad Haxl where
+              return a = Haxl (Done a)
+              m >>= k = Haxl $
+                case unHaxl m of
+                  Done a -> unHaxl (k a)
+                  Blocked r -> Blocked (r >>= k)
+          </code></pre>
+          
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/jroesch">jroesch</a></p>
