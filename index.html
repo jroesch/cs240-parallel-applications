@@ -62,7 +62,7 @@
             (>>=)  :: m a -> (a -> m b) -> m b
           </code></pre>
           
-          Monads have the seful property that they provide sequencing of operations, but this is not desirable when
+          Monads have the useful property that they provide sequencing of operations, but this is not desirable when
           we want to batch multiple data fetches at once. We then turn to a slightly weaker, but more useful concept of an
           Applicative. An Applicative is super class of our Monad type class meaning that for every Monad we also have
           an Applicative. 
@@ -77,11 +77,13 @@
           Haskell's support for parallelism enables this approach to scale across many machines and many cores. These
           engines operate seperately than from the data storage mechanisms allowing them to shard and distribute this
           approach across many machines without having to deal with state synchronization. It is my impresssion that
-          each shard of this service idpently deals with cache coherenece, and otherwise functions completely independently
+          each shard of this service indpendently deals with cache coherenece.
           
-          This approach seems to scale linearly according to the figures presented in Marlow's slides.
+          This approach seems to scale linearly according to the figures presented in Marlow's slides, and out performs
+          FXL even in its first iteration.
           
-          SLIDES: http://www.cs.ox.ac.uk/ralf.hinze/WG2.8/31/slides/simon.pdf
+          The slides accompanying this talk can be found here:
+            http://www.cs.ox.ac.uk/ralf.hinze/WG2.8/31/slides/simon.pdf
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/jroesch">jroesch</a></p>
