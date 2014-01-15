@@ -30,12 +30,12 @@
       <section>
         <h1>HaXL</h1>
           <p>
-          HaXL is a domain specific language for that is initially being used to fight spam at Facebook.
-          It is designed specifically for site-integretity engineers to write spam filtering rules.
-          To do this these engineers must query Facebook's vast data stores and make decisions based
-          on the data. Their original solution was a custom rule interpreter FXL. It written in C++ and
-          suffered from a variety of problems. Most importantly as a seperate language it was limited and
-          lacked the power and efficency of industrial strength languages and their accompying compilers.
+          HaXL is a domain specific language that is being used to fight spam at Facebook.
+          It is designed specifically for so called site-integretity engineers to write spam rules.
+          Most rules require engineers to query Facebook's numerous data stores and make decisions based
+          on how to react to possible incoming spam. Their original solution was FXL a custom rule interpreter. 
+          It unfortunately suffered from a variety of problems. Most importantly as a seperate language
+          it limited the power and efficency of the language, in comparsion to those that are well proven.
           
           Simon Marlow is one of the core contributors to Haskell, and decided that Haskell would be a great
           fit for doing this. Equipping engineers with the ability to write rules, but also be able to
@@ -57,25 +57,29 @@
           A monad is anything that satisfies this interface:
           
           <pre><code>
-          class Monad m where
+          class (Applicative m) => Monad m where
             return :: a -> m a
             (>>=)  :: m a -> (a -> m b) -> m b
           </code></pre>
           
           HaXL proposes an implementation of this signature that allows one to write programs that rely on data fetches.
+          Monads have the often useful property that they provide sequencing of operations, but this is not desirable when
+          we want to batch multiple data fetches at once. We then turn to a slightly weaker, but more useful concept of an
+          Applicative. An Applicative is super class of our Monad type class meaning that for every Monad we also have
+          an Applicative. This signature doesn't necessarily provide useful information about how this gives us what we
+          want. Any serious practioner of Haskell knows that Applicative provides a different way to explore the same
+          structure of the Monad. In our case it is interesting because Applicative's type signature expresses that its
+          arguments have data independence. This allows us to collect intermediate results with having to block on a 
+          single call. We can then batch these and execute them together.
           
-          <pre><code>
-            newtype Haxl a = Haxl { unHaxl :: Result a }
-            data Result a = Done a 
-                          | Blocked (Haxl a)
-            instance Monad Haxl where
-              return a = Haxl (Done a)
-              m >>= k = Haxl $
-                case unHaxl m of
-                  Done a -> unHaxl (k a)
-                  Blocked r -> Blocked (r >>= k)
-          </code></pre>
+          Haskell's support for parallelism enables this approach to scale across many machines and many cores. These
+          engines operate seperately than from the data storage mechanisms allowing them to shard and distribute this
+          approach across many machines without having to deal with state synchronization. It is my impresssion that
+          each shard of this service idpently deals with cache coherenece, and otherwise functions completely independently
           
+          This approach seems to scale linearly according to the figures presented in Marlow's slides.
+          
+          SLIDES: http://www.cs.ox.ac.uk/ralf.hinze/WG2.8/31/slides/simon.pdf
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/jroesch">jroesch</a></p>
